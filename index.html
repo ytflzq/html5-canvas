@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>canvas</title>
+    <meta charset="UTF-8">
+
+    <style type="text/css">
+
+    body{
+        margin:0;
+        padding: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="300" height="300" onclick="clickEvent(event)"  ></canvas>
+</body>
+<script type="text/javascript">
+ var canv = document.querySelector("canvas"),
+ cxt = canv.getContext("2d"),
+ w = 600,
+ h = 600,
+ x = w / 2,
+ y = h / 2,
+ dpr = window.devicePixelRatio,
+ t = 0;
+ window.requestAnimFrame = (function() {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+ })();
+ var numCircles = 160,
+    step = 360 / numCircles,
+    r = 100 * dpr,
+    cr = 2 * dpr;
+ function render() {
+    window.requestAnimFrame(render)
+    cxt.fillStyle = "rgba(255,255,255,0.1)";
+    cxt.fillRect(0, 0, w, h);
+    cxt.fillStyle = "#333"
+    for (var i = 0; i < 360; i += step) {
+        var pr = r + 100 * Math.sin(i / numCircles + t / 20);
+        var cx = x + pr * Math.sin(i + t / 500) - cr / 2,
+            cy = y + pr * Math.cos(i + t / 500) - cr / 2;
+        cxt.fillRect(cx, cy, cr, cr)
+    }
+    t += 1;
+ }
+ render()
+
+x=0;
+y=300;
+w=0;
+z=0;
+window.setInterval(function(){
+    console.log(x);
+    console.log(y);
+    // cxt.clearRect(0,0,300,300);
+    if (x>300) {
+        x = 0;
+        y = 300;
+        w = z = 0;
+        cxt.clearRect(0,0,300,300);
+    }
+    x = x+4;
+    y = y-4;
+    w = w+4;
+    z = z+4;
+    cxt.fillStyle="#666";
+    cxt.beginPath();
+    cxt.arc(x,y,2,0,Math.PI*2,true);
+    cxt.closePath();
+    cxt.fill();
+    cxt.fillStyle="#FF0000";
+    cxt.beginPath();
+    cxt.arc(w,z,2,0,Math.PI*2,true);
+    cxt.closePath();
+    cxt.fill();
+    // cxt.fillText("",x,y);
+},1000);
+
+
+</script>
+</html>

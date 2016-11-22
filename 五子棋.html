@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>canvas</title>
+    <meta charset="UTF-8">
+
+    <style type="text/css">
+
+    body{
+        margin:0;
+        padding: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400" onclick="clickEvent(event)"  ></canvas>
+<button onclick="reStart();">重置</button>
+<button onclick="back();">悔棋</button>
+<!-- <button onclick="next();">下一步</button> -->
+</body>
+<script type="text/javascript">
+var c=document.getElementById("canvas");
+var cxt=c.getContext("2d");
+var data = [];//每次点击的数据
+var clickCount = 0;//点击的次数
+drw_table();
+function drw_table() {
+    for (var i = 0; i < 400;) {
+        cxt.beginPath();
+        cxt.lineWidth="1";
+        cxt.strokeStyle="red"; // 红色路径
+        cxt.moveTo(i,0);
+        cxt.lineTo(i,400);
+        cxt.stroke(); // 进行绘制
+        cxt.beginPath();
+        cxt.lineWidth="1";
+        cxt.moveTo(0,i);
+        cxt.lineTo(400,i);
+        cxt.stroke(); // 进行绘制
+        i = i+20;
+    }
+}
+function clickEvent(e)
+{
+    x1=e.clientX;
+    y1=e.clientY;
+    for (var i = 0; i < 400;) {
+        if (x1>=i&&x1<i+10) {
+            x1 = i;
+            break;
+        }
+        if (x1>=i+10&&x1<i+20) {
+            x1 = i+20;
+            break;
+        }
+        i = i+20;
+    }
+    for (var i = 0; i < 400;) {
+        if (y1>=i&&y1<i+10) {
+            y1 = i;
+            break;
+        }
+        if (y1>=i+10&&y1<i+20) {
+            y1 = i+20;
+            break;
+        }
+        i = i+20;
+    }
+    if (!validateData(x1,y1)) {
+        if (clickCount%2==0) {
+            cxt.fillStyle="#666";
+        }else{
+            cxt.fillStyle="#333";
+        }
+        cxt.beginPath();
+        cxt.arc(x1,y1,10,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.fill();
+        data.push({'x':x1,'y':y1});
+        clickCount++;
+    }
+    
+}
+function reStart() {
+    cxt.clearRect(0,0,400,400);
+    drw_table();
+    data = [];
+    clickCount=0;
+}
+function back() {
+    cxt.clearRect(0,0,400,400);
+    drw_table();
+    clickCount--;
+    data.pop();
+    for (var i = 0; i < clickCount; i++) {
+        cxt.beginPath();
+        if (i%2==0) {
+            cxt.fillStyle="#666";
+        }else{
+            cxt.fillStyle="#333";
+        }
+        cxt.arc(data[i].x,data[i].y,10,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.fill();
+    }
+}
+//验证是否存在当前点了
+function validateData(x,y){
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].x ==x && data[i].y == y) {
+            alert("当前点已经存在");
+            return true;
+        }
+    }
+    return false;
+}
+</script>
+</html>
