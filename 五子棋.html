@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-<canvas id="canvas" width="400" height="400" onclick="clickEvent(event)"  ></canvas>
+<canvas id="canvas" width="600" height="600" onclick="clickEvent(event)"  ></canvas>
 <button onclick="reStart();">重置</button>
 <button onclick="back();">悔棋</button>
 </body>
@@ -20,7 +20,7 @@ var c=document.getElementById("canvas");
 var cxt=c.getContext("2d");
 var data = [];//每次点击的数据
 var clickCount = 0;//点击的次数
-var canvasWidth = 400;//画布大小
+var canvasWidth = 600;//画布大小
 var interval = 20;//间隔
 var isEnd = false;//判断当前局是否结束
 var colorW = '#666';
@@ -92,7 +92,7 @@ function clickEvent(e)
                 }
             }
         }else{
-            alert("当前点已经存在");
+            // alert("当前点已经存在");
         }
     }  
 }
