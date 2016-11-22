@@ -23,72 +23,79 @@ var c=document.getElementById("canvas");
 var cxt=c.getContext("2d");
 var data = [];//每次点击的数据
 var clickCount = 0;//点击的次数
+var canvasWidth = 400;//画布大小
+var interval = 20;//间隔
 drw_table();
 function drw_table() {
-    for (var i = 0; i < 400;) {
+    for (var i = 0; i < canvasWidth;) {
         cxt.beginPath();
         cxt.lineWidth="1";
         cxt.strokeStyle="red"; // 红色路径
         cxt.moveTo(i,0);
-        cxt.lineTo(i,400);
+        cxt.lineTo(i,canvasWidth);
         cxt.stroke(); // 进行绘制
         cxt.beginPath();
         cxt.lineWidth="1";
         cxt.moveTo(0,i);
-        cxt.lineTo(400,i);
+        cxt.lineTo(canvasWidth,i);
         cxt.stroke(); // 进行绘制
-        i = i+20;
+        i = i+interval;
     }
 }
 function clickEvent(e)
 {
     x1=e.clientX;
     y1=e.clientY;
-    for (var i = 0; i < 400;) {
-        if (x1>=i&&x1<i+10) {
+    for (var i = 0; i < canvasWidth;) {
+        if (x1>=i&&x1<i+interval/2) {
             x1 = i;
             break;
         }
-        if (x1>=i+10&&x1<i+20) {
-            x1 = i+20;
+        if (x1>=i+interval/2&&x1<i+interval) {
+            x1 = i+interval;
             break;
         }
-        i = i+20;
+        i = i+interval;
     }
-    for (var i = 0; i < 400;) {
-        if (y1>=i&&y1<i+10) {
+    for (var i = 0; i < canvasWidth;) {
+        if (y1>=i&&y1<i+interval/2) {
             y1 = i;
             break;
         }
-        if (y1>=i+10&&y1<i+20) {
-            y1 = i+20;
+        if (y1>=i+interval/2&&y1<i+interval) {
+            y1 = i+interval;
             break;
         }
-        i = i+20;
+        i = i+interval;
     }
     if (!validateData(x1,y1)) {
+        var isTrue = true;
         if (clickCount%2==0) {
             cxt.fillStyle="#666";
         }else{
             cxt.fillStyle="#333";
+            isTrue = false;
         }
         cxt.beginPath();
-        cxt.arc(x1,y1,10,0,Math.PI*2,true);
+        cxt.arc(x1,y1,interval/2,0,Math.PI*2,true);
         cxt.closePath();
         cxt.fill();
-        data.push({'x':x1,'y':y1});
+        data.push({'x':x1,'y':y1,'isTrue':isTrue});
         clickCount++;
+        isOver(x1,y1);
+    }else{
+        alert("当前点已经存在");
     }
     
 }
 function reStart() {
-    cxt.clearRect(0,0,400,400);
+    cxt.clearRect(0,0,canvasWidth,canvasWidth);
     drw_table();
     data = [];
     clickCount=0;
 }
 function back() {
-    cxt.clearRect(0,0,400,400);
+    cxt.clearRect(0,0,canvasWidth,canvasWidth);
     drw_table();
     clickCount--;
     data.pop();
@@ -108,11 +115,33 @@ function back() {
 function validateData(x,y){
     for (var i = 0; i < data.length; i++) {
         if (data[i].x ==x && data[i].y == y) {
-            alert("当前点已经存在");
             return true;
         }
     }
     return false;
+}
+function isOver(x1,y1) {
+    x2 = x3 = x4 = x5 = x1;
+    y2 = y3 = y4 = y5 = y1;
+    if (x1>=5*interval) {
+        x2 = x1-5*interval;
+    }else{
+
+    }
+    console.log(x2);
+    console.log(y2);
+    lineCount = 0;
+    for (var i = 0; i < 9; i++) {
+        if (!validateData(x2+interval*i,y2)) {
+            lineCount++;
+        }else{
+            lineCount=0;
+        }
+    }
+    if (lineCount==5) {
+        alert("已经赢了");
+        return true;
+    }
 }
 </script>
 </html>
