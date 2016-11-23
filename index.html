@@ -16,72 +16,84 @@
 <canvas id="canvas" width="300" height="300" onclick="clickEvent(event)"  ></canvas>
 </body>
 <script type="text/javascript">
- var canv = document.querySelector("canvas"),
- cxt = canv.getContext("2d"),
- w = 600,
- h = 600,
- x = w / 2,
- y = h / 2,
- dpr = window.devicePixelRatio,
- t = 0;
- window.requestAnimFrame = (function() {
-    return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        function(callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
- })();
- var numCircles = 160,
-    step = 360 / numCircles,
-    r = 100 * dpr,
-    cr = 2 * dpr;
- function render() {
-    window.requestAnimFrame(render)
-    cxt.fillStyle = "rgba(255,255,255,0.1)";
-    cxt.fillRect(0, 0, w, h);
-    cxt.fillStyle = "#333"
-    for (var i = 0; i < 360; i += step) {
-        var pr = r + 100 * Math.sin(i / numCircles + t / 20);
-        var cx = x + pr * Math.sin(i + t / 500) - cr / 2,
-            cy = y + pr * Math.cos(i + t / 500) - cr / 2;
-        cxt.fillRect(cx, cy, cr, cr)
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var org = {
+    x: 150,
+    y: 300
+};
+var now = {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height
+};
+var newxy = {
+    x: 0,
+    y: 0
+};
+function init() {
+    // ctx.beginPath();
+    // ctx.moveTo(org.x, org.y);
+    // ctx.lineTo(now.x, now.y);
+    // ctx.stroke();
+    math();
+}
+var colors = ["orange","blue","red"];
+var i = 1;
+var k = 0;
+var kend = 50;
+function math() {
+    var wid = Math.abs(now.x - org.x);//x轴的长，绝对值
+    var hei = Math.abs(now.y - org.y);//y轴长
+    var length = Math.pow(Math.pow(wid, 2) + Math.pow(hei, 2), 1 / 2);//（长平方＋宽平方）开根 ，其实就是直角三角关系
+    if (i < length) {//通过SetInterval，按照Length方向每次运行1px
+        if (org.x < now.x) {
+            newxy.x = org.x +wid / length * i;
+        }
+        else {
+            newxy.x = org.x - wid / length * i;
+        }
+        if (org.y < now.y) {
+            newxy.y = org.y + hei / length * i;
+        }
+        else {
+            newxy.y = org.y - hei / length * i;
+        }
+        i++;
+        comment();
+    }else{
+        if (k<kend) {
+            ctx.beginPath();
+            ctx.strokeStyle=colors[i % 3];
+            ctx.arc(now.x, now.y, k, 0, Math.PI * 2, true);
+            ctx.stroke();
+            k++
+        }else{
+            k = i = 0;
+            kend = Math.random() * 100;
+            now = {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height
+            };
+        }
     }
-    t += 1;
- }
- render()
+    
+}
+function comment() {
+    ctx.beginPath();
+    ctx.strokeStyle=colors[i % 3];
+    ctx.arc(newxy.x, newxy.y, 1, 0, Math.PI * 2, true);
+    ctx.fill();
+    ctx.stroke();
 
-x=0;
-y=300;
-w=0;
-z=0;
-window.setInterval(function(){
-    console.log(x);
-    console.log(y);
-    // cxt.clearRect(0,0,300,300);
-    if (x>300) {
-        x = 0;
-        y = 300;
-        w = z = 0;
-        cxt.clearRect(0,0,300,300);
-    }
-    x = x+4;
-    y = y-4;
-    w = w+4;
-    z = z+4;
-    cxt.fillStyle="#666";
-    cxt.beginPath();
-    cxt.arc(x,y,2,0,Math.PI*2,true);
-    cxt.closePath();
-    cxt.fill();
-    cxt.fillStyle="#FF0000";
-    cxt.beginPath();
-    cxt.arc(w,z,2,0,Math.PI*2,true);
-    cxt.closePath();
-    cxt.fill();
-    // cxt.fillText("",x,y);
-},1000);
-
-
+}
+function clean() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+setInterval(function () {
+    clean();
+    init();
+}, 5);
+window.onload("load", init(), true);
 </script>
 </html>

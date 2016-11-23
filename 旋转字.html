@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+ <html>
+  <head>
+   <meta charset="utf-8">
+   <title>旋转文本</title>
+  </head>
+ <body>
+  <canvas id="canvas" width="700" height="300"></canvas>
+ <script>
+
+ var canvas = document.getElementById("canvas");  
+      var context = canvas.getContext('2d');  
+      var Width=canvas.width;
+      var Height=canvas.height;
+      var  s = "   秋秋   ";
+      context.font="lighter 1.5em palatino";
+      var colors = ["orange","blue","red"];
+ 
+      function drawText(s,x,y){  
+        context.save();   
+        //   旋转文本
+       for (var i = 0; i < 12; i++) {
+         context.rotate(30 * Math.PI / 180);
+         context.strokeStyle=colors[i % 3];
+         context.strokeText(s, 0, 0);
+       }
+       context.restore();
+     }
+ 
+     var angle=0;
+     var loop = setInterval(function () {   
+          context.clearRect(0, 0, canvas.width, canvas.height);  
+          context.save();
+          // 平移原点到图形环境的中心
+          context.translate(Width/2,Height/2);
+          context.rotate(angle * Math.PI / 180);
+          drawText(s,Width/2,Height/2,angle);
+          context.restore();
+          angle = (angle + 10) % 360;   
+   }, 100);   
+
+</script>
+</body>
+</html>
