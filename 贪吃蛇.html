@@ -221,6 +221,7 @@ function reStart(){
     speed =1000;
     cxt.clearRect(0,0,canvasWidth,canvasWidth);
     drw_table();
+    timer=setTimeout("timedCount()",speed);
     document.getElementById("mes").innerHTML="你当前的成绩是："+socre+"  你当前的速度是"+speed+"毫秒移动一格";
 }
 function setSpeed(socre){
