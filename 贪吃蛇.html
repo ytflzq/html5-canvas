@@ -37,6 +37,7 @@ var direction = "up";
 var target = {x:7,y:10};
 var socre = 0;
 var speed =1000;
+var dataArrDif =[];
 drw_table();
 var timer=setTimeout("timedCount()",speed);
 
@@ -88,13 +89,20 @@ function drw_table() {
 
 function drw_rect() {
     cxt.fillStyle="red"; // 
-    cxt.fillRect(dataArr[0].x*20,dataArr[0].y*20,20,20);
+    cxt.fillRect(dataArr[0].x*20+2,dataArr[0].y*20+2,16,16);
     cxt.fillStyle="black"; // 
     for (var i = 1; i < dataArr.length; i++) {
-        cxt.fillRect(dataArr[i].x*20,dataArr[i].y*20,20,20);
+        cxt.fillRect(dataArr[i].x*20+2,dataArr[i].y*20+2,16,16);
+    }
+    cxt.fillStyle="red"; // 
+    for (var i = 0; i < dataArrDif.length; i++) {
+        cxt.fillRect(dataArrDif[i].x*20,dataArrDif[i].y*20,20,20);
     }
     cxt.fillStyle="blue"; // 
-    cxt.fillRect(target.x*20,target.y*20,20,20);
+    cxt.beginPath();
+    cxt.arc(target.x*20+10,target.y*20+10,interval/2,0,Math.PI*2,true);
+    cxt.closePath();
+    cxt.fill();
 }
 
 function timedCount()
@@ -133,6 +141,11 @@ function isSame(){
     }
     for (var i = 1; i < dataArr.length; i++) {
         if (dataArr[i].x==dataArr[0].x&&dataArr[i].y==dataArr[0].y) {
+            return true;
+        }
+    }
+    for (var i = 0; i < dataArrDif.length; i++) {
+        if (dataArrDif[i].x==dataArr[0].x&&dataArrDif[i].y==dataArr[0].y) {
             return true;
         }
     }
@@ -191,10 +204,17 @@ function isHasTarget(target){
             return true;
         }
     }
+    for (var i = 0; i < dataArrDif.length; i++) {
+        if (dataArrDif[i].x==target.x&&dataArrDif[i].y==target.y) {
+            return true;
+        }
+    }
+    
     return false;
 }
 function reStart(){
     dataArr = [{x:1,y:2},{x:1,y:3},{x:1,y:4}];
+    dataArrDif=[];
     direction = "right";
     target = {x:7,y:10};
     socre = 0;
@@ -205,12 +225,16 @@ function reStart(){
 }
 function setSpeed(socre){
     if (socre>=0&&socre<5) {
+        addDif(1);
         return 300;
     }else if (socre>=5&&socre<11) {
+        addDif(2);
         return 250;
     }else if (socre>=11&&socre<18) {
+        addDif(3);
         return 220;
     }else if (socre>=18&&socre<30) {
+        addDif(4);
         return 200;
     }else if (socre>=30&&socre<45) {
         return 170;
@@ -221,7 +245,26 @@ function setSpeed(socre){
     }else {
         return 50;
     }
-
+}
+function addDif(type){
+    if (type==1) {
+        for (var i = 0; i < 25; i++) {
+            dataArrDif.push({x:i,y:6});
+        }
+    }else if (type==2) {
+        for (var i = 5; i < 30; i++) {
+            dataArrDif.push({x:i,y:25});
+        }   
+    }else if (type==3) {
+        for (var i = 7; i < 24; i++) {
+            dataArrDif.push({x:6,y:i});
+        }   
+    }else if (type==4) {
+        for (var i = 7; i < 24; i++) {
+            dataArrDif.push({x:23,y:i});
+        }   
+    }
+        
 }
 </script>
 </html>
