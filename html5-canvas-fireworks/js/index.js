@@ -25,7 +25,7 @@ var Fireworks = function(){
 		self.canvas.height = self.ch = 400;	
 		
 		self.particles = [];	
-		self.partCount = 30;
+		self.散开心花数量 = 30;
 		self.fireworks = [];	
 		self.mx = self.cw/2;
 		self.my = self.ch/2;
@@ -42,7 +42,7 @@ var Fireworks = function(){
 		self.hueVariance = 30;
 		self.flickerDensity = 20;
 		self.showShockwave = false;
-		self.showTarget = true;
+		self.是否展示目标点 = true;
 		self.clearAlpha = 25;
 
 		self.canvasContainer.append(self.canvas);
@@ -133,7 +133,7 @@ var Fireworks = function(){
 	/* Create Particles
 	/*=============================================================================*/
 	self.createParticles = function(x,y, hue){
-		var countdown = self.partCount;
+		var countdown = self.散开心花数量;
 		while(countdown--){						
 			self.particles.push(new Particle(x, y, hue));
 		}
@@ -202,7 +202,7 @@ var Fireworks = function(){
 		this.coordLast[0].x = this.x;
 		this.coordLast[0].y = this.y;
 		
-		if(self.showTarget){
+		if(self.是否展示目标点){
 			if(this.targetRadius < 8){
 				this.targetRadius += .25 * self.dt;
 			} else {
@@ -260,7 +260,7 @@ var Fireworks = function(){
 		self.ctx.strokeStyle = 'hsla('+this.hue+', 100%, '+this.brightness+'%, '+this.alpha+')';
 		self.ctx.stroke();	
 		
-		if(self.showTarget){
+		if(self.是否展示目标点){
 			self.ctx.save();
 			self.ctx.beginPath();
 			self.ctx.arc(Math.round(this.targetX), Math.round(this.targetY), this.targetRadius, 0, Math.PI*2, false)
@@ -404,8 +404,8 @@ var guiPresets = {
 					"速度": 2,
 					"fworkAccel": 4,
 					"showShockwave": false,
-					"showTarget": true,
-					"partCount": 30,
+					"是否展示目标点": true,
+					"散开心花数量": 30,
 					"partSpeed": 5,
 					"partSpeedVariance": 10,
 					"partWind": 50,
@@ -424,8 +424,8 @@ var guiPresets = {
 					"速度": 4,
 					"fworkAccel": 10,
 					"showShockwave": true,
-					"showTarget": false,
-					"partCount": 150,
+					"是否展示目标点": false,
+					"散开心花数量": 150,
 					"partSpeed": 5,
 					"partSpeedVariance": 10,
 					"partWind": 10,
@@ -444,8 +444,8 @@ var guiPresets = {
 					"速度": 10,
 					"fworkAccel": 20,
 					"showShockwave": true,
-					"showTarget": true,
-					"partCount": 200,
+					"是否展示目标点": true,
+					"散开心花数量": 200,
 					"partSpeed": 30,
 					"partSpeedVariance": 5,
 					"partWind": 0,
@@ -464,8 +464,8 @@ var guiPresets = {
 					"速度": 3,
 					"fworkAccel": 3,
 					"showShockwave": true,
-					"showTarget": true,
-					"partCount": 500,
+					"是否展示目标点": true,
+					"散开心花数量": 500,
 					"partSpeed": 50,
 					"partSpeedVariance": 5,
 					"partWind": 0,
@@ -484,8 +484,8 @@ var guiPresets = {
 					"速度": 10,
 					"fworkAccel": 50,
 					"showShockwave": false,
-					"showTarget": false,
-					"partCount": 120,
+					"是否展示目标点": false,
+					"散开心花数量": 120,
 					"partSpeed": 10,
 					"partSpeedVariance": 10,
 					"partWind": 100,
@@ -504,8 +504,8 @@ var guiPresets = {
 					"速度": 2,
 					"fworkAccel": 2,
 					"showShockwave": false,
-					"showTarget": false,
-					"partCount": 200,
+					"是否展示目标点": false,
+					"散开心花数量": 200,
 					"partSpeed": 10,
 					"partSpeedVariance": 0,
 					"partWind": 100,
@@ -524,8 +524,8 @@ var guiPresets = {
 					"速度": 4,
 					"fworkAccel": 10,
 					"showShockwave": false,
-					"showTarget": false,
-					"partCount": 150,
+					"是否展示目标点": false,
+					"散开心花数量": 150,
 					"partSpeed": 10,
 					"partSpeedVariance": 10,
 					"partWind": 100,
@@ -575,14 +575,14 @@ var gui = new dat.GUI({
 var customContainer = document.getElementById('gui');
 customContainer.appendChild(gui.domElement);
 
-var guiFireworks = gui.addFolder('是');
+var guiFireworks = gui.addFolder('Fireworks');
 guiFireworks.add(fworks, '速度').min(1).max(10).step(1);
 guiFireworks.add(fworks, 'fworkAccel').min(0).max(50).step(1);
-guiFireworks.add(fworks, 'showShockwave');
-guiFireworks.add(fworks, 'showTarget');
+// guiFireworks.add(fworks, 'showShockwave');
+guiFireworks.add(fworks, '是否展示目标点');
 
 var guiParticles = gui.addFolder('Particles');
-guiParticles.add(fworks, 'partCount').min(0).max(500).step(1);	
+guiParticles.add(fworks, '散开心花数量').min(0).max(500).step(1);	
 guiParticles.add(fworks, 'partSpeed').min(1).max(100).step(1);
 guiParticles.add(fworks, 'partSpeedVariance').min(0).max(50).step(1);
 guiParticles.add(fworks, 'partWind').min(0).max(100).step(1);
